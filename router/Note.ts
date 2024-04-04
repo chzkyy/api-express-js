@@ -9,7 +9,7 @@ router.post('/create', async (req: Request, res: Response) => {
     res.status(201).json(note);
 });
 
-// Get a specific note
+// Get note
 router.get('/get', async (req: Request, res: Response) => {
     const note = await getNote(req, res);
     res.json(note);
