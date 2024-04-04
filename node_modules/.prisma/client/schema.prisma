@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" //mysql, postgresql, dll
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  token     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Note      Note[]
+}
+
+model Client_credentials {
+  id             Int      @id @default(autoincrement())
+  tokenable_type String
+  tokenable_id   BigInt
+  name           String
+  token          String
+  abilities      String?  @db.Text
+  last_used_at   DateTime
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Password_resets {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  user    Users  @relation(fields: [user_id], references: [id])
+  title   String
+  note    String @db.LongText
+}
