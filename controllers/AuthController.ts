@@ -77,3 +77,36 @@ export const login = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const logout = async (req: Request, res: Response) => {
+    try {
+        // get header request
+        const token = req.headers.authorization;
+        // get token
+        const tokenSplit = token.split(' ');
+        // get token
+        const tokenValue = tokenSplit[1];
+
+        //  check token in database
+        const user = await prisma.client_credentials.findFirst({
+            where: {
+                token: tokenValue,
+            },
+        });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // delete token
+        await prisma.client_credentials.delete({
+            where: {
+                id: user.id,
+            },
+        });
+
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
