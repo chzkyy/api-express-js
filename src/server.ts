@@ -1,6 +1,4 @@
 import express, { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { PrismaClient } from '@prisma/client'
 import authRouter from "../router/Auth";
 import noteRouter from "../router/Note";
